@@ -888,8 +888,3 @@ img { max-width: 100%; display: block; }
   .title-sub { font-size: 26px; }
 }
 
-@media (max-width: 768px) {
-  .artwork {
-    object-position: 38% center;
-  }
-}
