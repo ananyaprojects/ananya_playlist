@@ -1,0 +1,188 @@
+/* ==========================================================================
+   Ananya's Playlist — animations.css
+   All keyframes. Everything here is intentionally slow: the brief is
+   "a memory slowly breathing," not a UI demo. Nothing here should be
+   noticeable within the first two seconds of looking at it.
+   ========================================================================== */
+
+/* ---- the artwork breathes with an extremely slow, subtle zoom ---- */
+.artwork-zoom {
+  animation: slow-breathe 14s ease-in-out infinite alternate;
+}
+
+@keyframes slow-breathe {
+
+  0% {
+    transform: scale(1) translate3d(0, 0,0);
+  }
+
+  50% {
+    transform: scale(1.025) translate3d(-0.4%, -0.25%,0);
+  }
+
+  100% {
+    transform: scale(1.04) translate3d(0.4%, 0/25%, 0);
+  }
+
+}
+/* ---- sunlight glow, breathing on its own slower cycle ---- */
+.glow {
+  animation: glow-breathe 7s ease-in-out infinite;
+}
+
+@keyframes glow-breathe {
+
+  0% {
+    opacity: 0.55;
+    transform: scale(0.96);
+  }
+
+  50% {
+    opacity: 0.95;
+    transform: scale(1.04);
+  }
+
+  100% {
+    opacity: 0.55;
+    transform: scale(0.96);
+  }
+
+}
+
+.sun-rays {
+  animation: sunlight-rays 12s ease-in-out infinite alternate;
+}
+
+@keyframes sunlight-rays {
+
+  0% {
+    opacity: 0.28;
+    transform:
+      translateX(-1%)
+      translateY(0)
+      rotate(-1deg)
+      scale(1);
+  }
+
+  100% {
+    opacity: 0.65;
+    transform:
+      translateX(2%)
+      translateY(1%)
+      rotate(0.5deg)
+      scale(1.03);
+  }
+
+}
+
+/* ---- lens flare drifts across the frame only occasionally ---- */
+.lens-flare {
+  animation: flare-sweep 18s ease-in-out infinite;
+}
+
+@keyframes flare-sweep {
+
+  0% {
+    opacity: 0;
+    transform: translate(-5vw, -2vh) scale(0.9);
+  }
+
+  12% {
+    opacity: 0;
+  }
+
+  22% {
+    opacity: 0.38;
+  }
+
+  38% {
+    opacity: 0.18;
+    transform: translate(18vw, 3vh) scale(1);
+  }
+
+  50% {
+    opacity: 0;
+    transform: translate(28vw, 5vh) scale(1.05);
+  }
+
+  100% {
+    opacity: 0;
+    transform: translate(28vw, 5vh) scale(1.05);
+  }
+
+}
+
+/* ---- floating dust / light particles ---- */
+.particle {
+  animation: particle-drift linear infinite;
+}
+
+@keyframes particle-drift {
+  0% {
+    opacity: 0;
+    transform: translate(0, 0);
+  }
+  8% { opacity: var(--p-opacity, 0.5); }
+  92% { opacity: var(--p-opacity, 0.5); }
+  100% {
+    opacity: 0;
+    transform: translate(var(--p-dx, 40px), var(--p-dy, -160px));
+  }
+}
+
+/* ---- play button gentle pulse while music is playing ---- */
+@keyframes pulse-play {
+  0%   { box-shadow: 0 0 0 0 rgba(246, 195, 77, 0.45); }
+  70%  { box-shadow: 0 0 0 10px rgba(246, 195, 77, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(246, 195, 77, 0); }
+}
+
+/* ---- mini visualizer bars, only animated while playing ---- */
+.mini-visualizer span {
+  animation-duration: 1.1s;
+  animation-timing-function: ease-in-out;
+  animation-iteration-count: infinite;
+  animation-play-state: paused;
+  transition: height 0.3s;
+}
+
+.mini-visualizer.is-playing span { animation-play-state: running; }
+
+.mini-visualizer span:nth-child(1) { animation-name: bar-bounce-1; animation-delay: 0s; }
+.mini-visualizer span:nth-child(2) { animation-name: bar-bounce-2; animation-delay: 0.12s; }
+.mini-visualizer span:nth-child(3) { animation-name: bar-bounce-3; animation-delay: 0.24s; }
+.mini-visualizer span:nth-child(4) { animation-name: bar-bounce-1; animation-delay: 0.36s; }
+
+@keyframes bar-bounce-1 {
+  0%, 100% { height: 30%; }
+  50% { height: 90%; }
+}
+@keyframes bar-bounce-2 {
+  0%, 100% { height: 50%; }
+  50% { height: 20%; }
+}
+@keyframes bar-bounce-3 {
+  0%, 100% { height: 35%; }
+  50% { height: 100%; }
+}
+
+/* ---- letter text fades in line by line once the paper is out ---- */
+.letter-text p {
+  opacity: 0;
+  transform: translateY(6px);
+  animation: letter-line-in 0.7s var(--ease-soft) forwards;
+}
+
+@keyframes letter-line-in {
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .artwork-zoom,
+  .glow,
+  .lens-flare,
+  .particle,
+  .play-btn.is-playing {
+    animation: none !important;
+  }
+}
