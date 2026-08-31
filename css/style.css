@@ -887,3 +887,9 @@ img { max-width: 100%; display: block; }
   .title-main { font-size: 34px; }
   .title-sub { font-size: 26px; }
 }
+
+@media (max-width: 768px) {
+  .artwork {
+    object-position: 38% center;
+  }
+}
