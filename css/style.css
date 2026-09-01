@@ -887,7 +887,7 @@ img { max-width: 100%; display: block; }
   z-index: 4;
   left: 0;
   right: 0;
-  bottom: clamp(96px, 13vw, 128px);
+  bottom: clamp(160px, 22vw, 200px);
   display: flex;
   justify-content: center;
   padding: 0 24px;
@@ -914,7 +914,7 @@ img { max-width: 100%; display: block; }
 }
 
 @media (min-width: 900px) {
-  .lyrics-display { bottom: clamp(120px, 12vw, 150px); }
+  .lyrics-display { bottom: clamp(180px, 18vw, 220px); }
 }
 
 @media (max-width: 380px) {
