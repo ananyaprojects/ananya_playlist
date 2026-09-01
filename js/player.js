@@ -3,7 +3,8 @@
   ─────────
   Everything to do with actually playing music: the <audio> element,
   play/pause/next/prev, the seek bar, the volume bar, and time display.
-  Reads its songs from PLAYLIST (playlist-data.js).
+  Also auto-displays lyrics (one line every 3 seconds) if a song has a
+  `lyrics` text file linked in PLAYLIST (playlist-data.js).
 */
 
 const Player = (() => {
@@ -23,11 +24,18 @@ const Player = (() => {
     iconPause: document.querySelector(".icon-pause"),
     visualizer: document.getElementById("visualizer"),
     playBtnEl: document.getElementById("playBtn"),
+    lyricsDisplay: document.getElementById("lyricsDisplay"),
+    lyricsLine: document.getElementById("lyricsLine"),
   };
 
   let currentIndex = 0;
   let isSeeking = false;
   const listeners = { trackchange: [] };
+
+  // ---- lyrics state ----
+  let currentLyricsLines = [];
+  let currentLyricIndex = -1;
+  const LYRIC_LINE_SECONDS = 3; // universal duration per line
 
   function formatTime(seconds) {
     if (!isFinite(seconds) || seconds < 0) return "0:00";
@@ -47,6 +55,26 @@ const Player = (() => {
     els.currentTime.textContent = "0:00";
     els.duration.textContent = "0:00";
 
+    // reset lyrics for the new track
+    currentLyricsLines = [];
+    currentLyricIndex = -1;
+    els.lyricsLine.textContent = "";
+    els.lyricsLine.classList.remove("is-visible");
+
+    if (song.lyrics) {
+      fetch(song.lyrics)
+        .then((res) => res.text())
+        .then((text) => {
+          currentLyricsLines = text
+            .split("\n")
+            .map((l) => l.trim())
+            .filter(Boolean);
+        })
+        .catch(() => {
+          currentLyricsLines = [];
+        });
+    }
+
     listeners.trackchange.forEach((fn) => fn(currentIndex, song));
 
     if (autoplay) {
@@ -54,6 +82,22 @@ const Player = (() => {
         /* autoplay was blocked — that's fine, the UI stays paused */
       });
     }
+  }
+
+  function updateLyrics(time) {
+    if (!currentLyricsLines.length) return;
+    const idx = Math.min(
+      Math.floor(time / LYRIC_LINE_SECONDS),
+      currentLyricsLines.length - 1
+    );
+    if (idx === currentLyricIndex) return;
+    currentLyricIndex = idx;
+
+    els.lyricsLine.classList.remove("is-visible");
+    setTimeout(() => {
+      els.lyricsLine.textContent = currentLyricsLines[idx] || "";
+      if (currentLyricsLines[idx]) els.lyricsLine.classList.add("is-visible");
+    }, 350); // matches CSS fade-out duration
   }
 
   function setPlayingUI(playing) {
@@ -116,6 +160,7 @@ const Player = (() => {
       if (isSeeking) return;
       els.seekBar.value = audio.currentTime;
       els.currentTime.textContent = formatTime(audio.currentTime);
+      updateLyrics(audio.currentTime);
     });
 
     els.seekBar.addEventListener("input", () => {
