@@ -14,7 +14,7 @@
 
 const PLAYLIST = [
   {
-  title: "Your New Song",
+  title: "Pinjra",
   artist: "Ananya Mishra",
   src: "assets/audio/Pinjraa.mp3",
   lyrics: "assets/pinjra.txt",
