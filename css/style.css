@@ -914,7 +914,7 @@ img { max-width: 100%; display: block; }
 }
 
 @media (min-width: 900px) {
-  .lyrics-display { bottom: clamp(300px, 34vw, 380px); }
+  .lyrics-display { bottom: clamp(220px, 26vw, 280px); }
 }
 
 @media (max-width: 380px) {
